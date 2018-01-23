@@ -1,0 +1,25 @@
+{
+  "name": "diary-with-virtual-array",
+  "description": "Swipe, calendar, animations, keyboard & mobile support",
+  "version": "0.0.230",
+  "dependencies": {
+    "react-transition-group": "latest",
+    "react-swipeable-views": "latest",
+    "react-dom": "latest",
+    "react": "latest",
+    "moment": "latest",
+    "material-ui-pickers": "1.0.0-beta.8",
+    "material-ui-icons": "1.0.0-beta.17",
+    "material-ui": "1.0.0-beta.30",
+    "immutability-helper": "latest"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
