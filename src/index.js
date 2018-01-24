@@ -237,13 +237,9 @@ class App extends Component {
 
   emptyData = () => {
       return (
-        <Tooltip 
-          id="Item"
-          title="add new item">
           <div style={styles.emptySection} key={999} onClick={() => alert('add some logic')}>
             <p style={{...styles.p, ...{ fontSize: 22, fontWeight: 'bold' }}}>+</p>
           </div>
-        </Tooltip>
       )
   }
 
