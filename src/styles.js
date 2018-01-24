@@ -2,8 +2,7 @@ const styles = {
   container: {
     backgroundColor: '#fafafa',
     padding: 25,
-    cursor: 'grab',
-    cursor: 'pointer',
+    cursor: 'move',
     minHeight: 200
   },
   slideContainer: {
