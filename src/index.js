@@ -1,14 +1,13 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import moment from 'moment';
 import 'moment/locale/fi';
-moment.locale('fi')
 import update from 'immutability-helper';
 import dummyData from './dummyData';
 import SwipeableViews from 'react-swipeable-views';
-import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
+import { bindKeyboard } from 'react-swipeable-views-utils';
 import Select from 'material-ui/Select';
-import Menu, { MenuItem } from 'material-ui/Menu';
+import { MenuItem } from 'material-ui/Menu';
 import { DatePicker } from 'material-ui-pickers'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Tooltip from 'material-ui/Tooltip';
@@ -20,8 +19,16 @@ import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 
 const KeyboardSwipeableViews = bindKeyboard(SwipeableViews);
-const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
+// language
+const getLang = () => {
+  if (navigator.languages !== undefined) return navigator.languages[0];
+  return navigator.language;
+}
+moment.locale(getLang())
+
+
+// theme
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -78,11 +85,11 @@ class App extends Component {
     startD = startD.format('YYYY-MM-DD');
     const startd = new Date(startD);
 
-    let stopD = dummyData[dummyData.length -1].date;
+    let stopD = dummyData[dummyData.length - 1].date;
     stopD = moment(stopD).add(50, 'days');
     stopD = stopD.format('YYYY-MM-DD');
     const stopd = new Date(stopD);
-    
+
     const getDates = (startDate, stopDate) => {
       let dateArray = [];
       let currentDate = moment(startDate);
@@ -177,6 +184,7 @@ class App extends Component {
           toggle: i,
         });
       }
+      return null
     });
   }
 
@@ -196,7 +204,9 @@ class App extends Component {
           });
           this.setState({ data: newData, show: !this.state.show })
         }
+        return null
       })
+      return null
     })
     this.setState({ toggle })
   }
@@ -214,6 +224,7 @@ class App extends Component {
             changeDay: f.key,
           });
         }
+        return null
       })
 
     }
@@ -222,7 +233,7 @@ class App extends Component {
   onChangeIndex = index => {
     let changeState = Object.assign({}, this.state.index)
     changeState = index
-    
+
     this.state.data.map((f, i) => {
       if (changeState === i) {
         this.setState({
@@ -231,22 +242,23 @@ class App extends Component {
         });
         this.removeAddToggle(i)
       }
+      return null
     })
 
   }
 
   emptyData = () => {
-      return (
-          <div style={styles.emptySection} key={999} onClick={() => alert('add some logic')}>
-            <p style={{...styles.p, ...{ fontSize: 22, fontWeight: 'bold' }}}>+</p>
-          </div>
-      )
+    return (
+      <div style={styles.emptySection} key={999} onClick={() => alert('add some logic')}>
+        <p style={{ ...styles.p, ...{ fontSize: 22, fontWeight: 'bold' } }}>+</p>
+      </div>
+    )
   }
 
-  handleChange = event => this.setState({ section: event.target.value});
+  handleChange = event => this.setState({ section: event.target.value });
 
   menuItems = x => {
-    return x.map((s,i) => (
+    return x.map((s, i) => (
       <MenuItem
         key={i}
         value={s}
@@ -259,7 +271,8 @@ class App extends Component {
     // change day
     this.state.data.filter((x, i) => {
       if (i === index) { return true }
-    }).map((x, i) => this.setState({ changeDay: x.key }))
+      return false
+    }).map((x, i) => { return this.setState({ changeDay: x.key }) })
 
     // remove/add toggle
     this.removeAddToggle(index)
@@ -267,7 +280,8 @@ class App extends Component {
     // open date picker
     this.state.data.filter((x, i) => {
       if (x.selected && i === index) { return true }
-    }).map(() => this.picker.togglePicker())
+      return false
+    }).map(() => { return this.picker.togglePicker() })
 
     this.setState({ index })
   }
@@ -283,12 +297,13 @@ class App extends Component {
         });
         this.removeAddToggle(i)
       }
+      return null
     })
   }
 
   render() {
 
-    const render = this.state.data.map((x,i) => {
+    const render = this.state.data.map((x, i) => {
       let values = [];
       if (x.values) { values = x.values }
 
@@ -297,12 +312,12 @@ class App extends Component {
           <div key={i} style={styles.container}>
             <TransitionGroup>
               {values.filter(f => {
-                if (f.section === this.state.section){
+                if (f.section === this.state.section) {
                   return true
                 }
                 return false
-              }).
-              map((z,j,k) => {
+              })
+                .map((z, j, k) => {
                   return (
                     <Fade key={j}>
                       <div style={styles.section} key={j} onClick={() => alert(z.name)}>
@@ -312,7 +327,7 @@ class App extends Component {
                       </div>
                     </Fade>
                   )
-              })}
+                })}
               {this.emptyData()}
             </TransitionGroup>
           </div>
@@ -326,108 +341,108 @@ class App extends Component {
     });
 
 
-    const renderDates = this.state.data.map((x,i) => {
-        const dateNames = moment(x.key).calendar(null, {
-          lastDay: '[yesterday]', //!
-          sameDay: '[today]', //!
-          nextDay: '[tomorrow]', //!
-          lastWeek: 'dd MMM Do',
-          nextWeek: 'dd MMM Do',
-          sameElse: 'dd MMM Do'
-        })
+    const renderDates = this.state.data.map((x, i) => {
+      const dateNames = moment(x.key).calendar(null, {
+        lastDay: '[yesterday]', //!
+        sameDay: '[today]', //!
+        nextDay: '[tomorrow]', //!
+        lastWeek: 'dd MMM Do',
+        nextWeek: 'dd MMM Do',
+        sameElse: 'dd MMM Do'
+      })
 
-        let date = dateNames;
-        const year = moment(x.key).format('YYYY');
-        const yearTwo = moment().format('YYYY');
-          if(year !== yearTwo){
-            date = moment(x.key).format('ll');
-          }
+      let date = dateNames;
+      const year = moment(x.key).format('YYYY');
+      const yearTwo = moment().format('YYYY');
+      if (year !== yearTwo) {
+        date = moment(x.key).format('ll');
+      }
 
-          // toggled style
-          let selectedStyle;
-          let calendar = 
-          <div
-            style={{ ...styles.slide, ...selectedStyle }}>
-            {date}
-          </div>
-          if (x.selected) {
-            selectedStyle = {
-              fontWeight: 'bold',
-              opacity: 1,
-              borderTop: 'solid 5px #82b1ff',
-              cursor: 'context-menu',
-              entering: { opacity: 0 },
-              entered: { opacity: 1 },
-            }
-            calendar = 
-            <Tooltip 
-              id="Calendar" 
-              title="open calendar">
-                <div
-                  style={{ ...styles.slide, ...selectedStyle }}>
-                  {date}
-                </div>
-            </Tooltip>
-          }
-        return (
-          <div
+      // toggled style
+      let selectedStyle;
+      let calendar =
+        <div
+          style={{ ...styles.slide, ...selectedStyle }}>
+          {date}
+        </div>
+      if (x.selected) {
+        selectedStyle = {
+          fontWeight: 'bold',
+          opacity: 1,
+          borderTop: 'solid 5px #82b1ff',
+          cursor: 'context-menu',
+          entering: { opacity: 0 },
+          entered: { opacity: 1 },
+        }
+        calendar =
+          <Tooltip
+            id="Calendar"
+            title="open calendar">
+            <div
+              style={{ ...styles.slide, ...selectedStyle }}>
+              {date}
+            </div>
+          </Tooltip>
+      }
+      return (
+        <div
           key={i}
-            onClick={() => this.dayChange(i)}>
-            <Transition in={this.state.show} timeout={500}>
-              {calendar}
-            </Transition>
-          </div>
-        )
+          onClick={() => this.dayChange(i)}>
+          <Transition in={this.state.show} timeout={500}>
+            {calendar}
+          </Transition>
+        </div>
+      )
     })
 
     return (
-        <MuiThemeProvider theme={theme}>
-          <div style={styles.selector}>
-            <Select
-              name='joo'
-              fullWidth
-              value={this.state.section}
-              onChange={this.handleChange}
-            >
-              {this.menuItems(this.state.sections)}
-            </Select>
-          </div>
-
-          <SwipeableViews
-            ignoreNativeScroll
-            enableMouseEvents
-            resistance
-            animateHeight
-            index={this.state.index}
-            onChangeIndex={this.onChangeIndex}
+      <MuiThemeProvider theme={theme}>
+        <div style={styles.selector}>
+          <Select
+            name='joo'
+            fullWidth
+            value={this.state.section}
+            onChange={this.handleChange}
           >
-            {render}
-          </SwipeableViews>
+            {this.menuItems(this.state.sections)}
+          </Select>
+        </div>
 
-          <KeyboardSwipeableViews
-            threshold={ 1 }
-            ignoreNativeScroll
-            enableMouseEvents
-            resistance
-            style={styles.root}
-            slideStyle={styles.slideContainer}
-            index={this.state.index}
-            onChangeIndex={this.onChangeIndex}
-          >
-            {renderDates}
-          </KeyboardSwipeableViews>
+        <SwipeableViews
+          ignoreNativeScroll
+          enableMouseEvents
+          resistance
+          animateHeight
+          index={this.state.index}
+          onChangeIndex={this.onChangeIndex}
+        >
+          {render}
+        </SwipeableViews>
 
-            <DatePicker
-              leftArrowIcon={ <KeyboardArrowLeft /> }
-              rightArrowIcon={ <KeyboardArrowRight /> }
-              autoOk
-              ref={node => { this.picker = node; }}
-              value={new Date(this.state.changeDay)}
-              onChange={ date => this.calendarChange(date) }
-              maxDate={ this.state.maxDate }
-              minDate={ this.state.minDate }
-              style={{ display: 'none' }}
-            />
+        <KeyboardSwipeableViews
+          threshold={1}
+          ignoreNativeScroll
+          enableMouseEvents
+          resistance
+          style={styles.root}
+          slideStyle={styles.slideContainer}
+          index={this.state.index}
+          onChangeIndex={this.onChangeIndex}
+        >
+          {renderDates}
+        </KeyboardSwipeableViews>
+
+        <DatePicker
+          leftArrowIcon={<KeyboardArrowLeft />}
+          rightArrowIcon={<KeyboardArrowRight />}
+          autoOk
+          ref={node => { this.picker = node; }}
+          value={new Date(this.state.changeDay)}
+          onChange={date => this.calendarChange(date)}
+          maxDate={this.state.maxDate}
+          minDate={this.state.minDate}
+          style={{ display: 'none' }}
+        />
       </MuiThemeProvider>
     )
   }
